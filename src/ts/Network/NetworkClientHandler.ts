@@ -10,6 +10,10 @@ import Game from "../Game";
 import World from "../World/World";
 import EntityPlayer from "../World/Entities/Livings/EntityPlayer";
 import EntityRenderable from "../World/Entities/EntityRenderable";
+import Packet6MoveEntity from "./Packets/Packet6MoveEntity";
+import Entity from "../World/Entities/Entity";
+import EntityLiving from "../World/Entities/EntityLiving";
+import EntityPlayerMP from "../World/Entities/Livings/EntityPlayerMP";
 
 export interface ConnectionInformationHandlers {
     connected?: () => void;
@@ -21,6 +25,8 @@ export default class NetworkClientHandler extends NetworkHandler {
     public static readonly PROTOCOL_VERSION = 1;
 
     protected username: string;
+
+    protected player: EntityPlayerMP = null;
 
     protected kickedReason: string = null;
 
@@ -80,7 +86,27 @@ export default class NetworkClientHandler extends NetworkHandler {
                 throw new Error('Spawn Entity is null!');
             }
         } else if (packet instanceof Packet5DamageEntity) {
-            console.log(packet);
+            const entity = Game.instance.getWorld().getEntity(packet.getEntityId());
+            if (entity && packet.isKilled()) {
+                Game.instance.getWorld().removeEntity(entity as EntityRenderable);
+            }
+        } else if (packet instanceof Packet6MoveEntity) {
+            let moveData;
+            while ((moveData = packet.shift()) !== undefined) {
+                const e: Entity = Game.instance.getWorld().getEntity(moveData.entityId);
+                if (!(e instanceof EntityLiving)) {
+                    return;
+                }
+                e.setSpeed(moveData.speed);
+                e.teleport(moveData.position);
+                e.setHeadAngle(moveData.headAngle);
+                e.setMoveAngle(moveData.moveAngle);
+                e.setStrafeAngle(moveData.strafeAngle);
+                e.setMove(moveData.moving);
+                // if (this.player && packet.isTeleport() && e instanceof EntityPlayer && e.id == this.player.id) {
+                //     .setCameraPositionToPlayer();
+                // }
+            }
         } else {
             console.log(packet);
         }

@@ -97,6 +97,10 @@ export default abstract class Entity {
         //
     }
 
+    public getPosition(): Point {
+        return this.position;
+    }
+
     public get positionCenter(): Point {
         return this.position.clone().add(this.size.clone().div(2));
     }

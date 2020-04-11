@@ -12,7 +12,10 @@ export default abstract class EntityLiving extends EntityRenderable {
     tick(delta: number): void {
         super.tick(delta);
         const angle = this.moveAngle + this.strafeAngle;
-        this.position.add(Math.cos(angle) * this.currentSpeed * delta, Math.sin(angle) * this.currentSpeed * delta);
+        this.position.add(
+            Math.cos(MathUtils.toRadians(angle)) * this.currentSpeed * delta,
+            Math.sin(MathUtils.toRadians(angle)) * this.currentSpeed * delta
+        );
     }
 
     protected get moveAngle(): number {
