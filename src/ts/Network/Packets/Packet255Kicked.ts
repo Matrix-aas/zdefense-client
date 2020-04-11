@@ -1,7 +1,7 @@
 import {Packet, packet, PacketSide} from "./Packet";
 import ArrayBufferStream from "../ArrayBufferStream";
 
-@packet(255, PacketSide.CLIENT)
+@packet(255, PacketSide.CLIENT, true)
 export default class Packet255Kicked extends Packet {
     private reason: string;
 

@@ -76,7 +76,11 @@ export default abstract class NetworkHandler {
 
         message.data.arrayBuffer().then((buffer: ArrayBuffer) => {
             const packet = Packet.createPacketFromStream(new ArrayBufferStream(buffer), PacketSide.CLIENT);
-            this.packetsToProcess.push(packet);
+            if (packet.isPacketImmediately()) {
+                this.handlePacket(packet);
+            } else {
+                this.packetsToProcess.push(packet);
+            }
         });
     }
 

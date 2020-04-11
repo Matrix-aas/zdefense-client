@@ -2,6 +2,8 @@ import * as PIXI from "pixi.js";
 import World from "./World";
 import Game from "../Game";
 import Resources from "../Helpers/Resources";
+import Entity from "./Entities/Entity";
+import EntityRenderable from "./Entities/EntityRenderable";
 
 export default class WorldClient extends World {
     protected stage: PIXI.Container = new PIXI.Container;
@@ -31,7 +33,7 @@ export default class WorldClient extends World {
                 if (!entity.isDied()) {
                     entity.tick(delta);
                 } else {
-                    this.removeEntity(entity);
+                    this.removeEntity(entity as EntityRenderable);
                 }
             });
         });
@@ -48,5 +50,22 @@ export default class WorldClient extends World {
     public addToStage(stage: PIXI.Container): void {
         stage.addChild(this.groundStage);
         stage.addChild(this.worldStage);
+    }
+
+    public spawnEntity(entity: EntityRenderable, id?: number): Entity {
+        super.spawnEntity(entity, id);
+        this.worldStage.addChild(entity.stage);
+        return entity;
+    }
+
+    public removeEntity(entity: EntityRenderable | number): void {
+        let e: EntityRenderable;
+        if (entity instanceof EntityRenderable) {
+            e = entity;
+        } else {
+            e = this.getEntity(entity) as EntityRenderable;
+        }
+        super.removeEntity(entity);
+        this.worldStage.removeChild(e.stage);
     }
 }

@@ -1,6 +1,6 @@
 import Entity from "../Entity";
-import EntityPlayer from "./EntityPlayer";
 import EntityZombie from "./EntityZombie";
+import EntityPlayerMP from "./EntityPlayerMP";
 
-Entity.registerEntity(EntityPlayer);
+Entity.registerEntity(EntityPlayerMP);
 Entity.registerEntity(EntityZombie);

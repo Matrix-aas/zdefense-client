@@ -5,6 +5,7 @@ import GUIManager from "./GUI/GUIManager";
 import GUIDebug from "./GUI/GUIDebug";
 import {EventEmitter2, Listener as EventEmitterListener} from 'eventemitter2';
 import WorldClient from "./World/WorldClient";
+import NetworkManager from "./Network/NetworkManager";
 
 PIXI.utils.skipHello();
 
@@ -18,6 +19,7 @@ export default class Game {
     private camera: Camera = null;
     private world: WorldClient = null;
     private guiManager: GUIManager = null;
+    private networkManager: NetworkManager = null;
 
     constructor() {
         this.eventBus = new EventEmitter2({
@@ -33,9 +35,12 @@ export default class Game {
             height: window.innerHeight,
         });
 
+        this.pixiApp.ticker.maxFPS = 60;
+
         this.camera = new Camera();
         this.world = new WorldClient();
         this.guiManager = new GUIManager();
+        this.networkManager = new NetworkManager();
     }
 
     public pixi(): PIXI.Application {
@@ -76,6 +81,10 @@ export default class Game {
 
         this.world.addToStage(this.pixiApp.stage);
         this.guiManager.addToStage(this.pixiApp.stage);
+
+        Game.instance.pixi().ticker.add(async delta => {
+            await this.networkManager.networkTick();
+        });
 
         // TODO: Debug
         this.guiManager.go(new GUIDebug());

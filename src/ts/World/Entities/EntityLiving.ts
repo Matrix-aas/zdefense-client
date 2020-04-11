@@ -6,14 +6,52 @@ export default abstract class EntityLiving extends EntityRenderable {
     protected defaultSpeed = 0;
     protected currentSpeed = 0;
 
-    protected headAngle = 0;
-    protected moveAngle = 0;
-    protected strafeAngle = 0;
+    protected _headAngle = 0;
+    protected _strafeAngle = 0;
 
     tick(delta: number): void {
         super.tick(delta);
         const angle = this.moveAngle + this.strafeAngle;
-        this.position.add(Math.cos(angle) * this.currentSpeed / delta, Math.sin(angle) * this.currentSpeed * delta);
+        this.position.add(Math.cos(angle) * this.currentSpeed * delta, Math.sin(angle) * this.currentSpeed * delta);
+    }
+
+    protected get moveAngle(): number {
+        return this.angle;
+    }
+
+    protected set moveAngle(value: number) {
+        this.angle = value;
+        this.onMoveAngleChange();
+    }
+
+    protected onMoveAngleChange(): void {
+        //
+    }
+
+    protected get headAngle(): number {
+        return this._headAngle;
+    }
+
+    protected set headAngle(value: number) {
+        this._headAngle = value;
+        this.onHeadAngleChange();
+    }
+
+    protected onHeadAngleChange(): void {
+        //
+    }
+
+    protected get strafeAngle(): number {
+        return this._strafeAngle;
+    }
+
+    protected set strafeAngle(value: number) {
+        this._strafeAngle = value;
+        this.onStrafeAngleChange();
+    }
+
+    protected onStrafeAngleChange(): void {
+        //
     }
 
     public setMove(moving: boolean): void {
@@ -89,7 +127,6 @@ export default abstract class EntityLiving extends EntityRenderable {
         this.defaultSpeed = inputBuffer.readFloat32();
         this.currentSpeed = inputBuffer.readFloat32();
         this.headAngle = inputBuffer.readFloat32();
-        this.moveAngle = inputBuffer.readFloat32();
         this.strafeAngle = inputBuffer.readFloat32();
     }
 
@@ -98,7 +135,6 @@ export default abstract class EntityLiving extends EntityRenderable {
         outputBuffer.writeFloat32(this.defaultSpeed);
         outputBuffer.writeFloat32(this.currentSpeed);
         outputBuffer.writeFloat32(this.headAngle);
-        outputBuffer.writeFloat32(this.moveAngle);
         outputBuffer.writeFloat32(this.strafeAngle);
     }
 }

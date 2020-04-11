@@ -34,6 +34,16 @@ export default abstract class EntityRenderable extends Entity {
                 ttl: 20
             };
         });
+
+        this.position.on('change', (x: number, y: number) => {
+            this.stage.position.x = x;
+            this.stage.position.y = y;
+        });
+    }
+
+    protected onAngleChanged(): void {
+        super.onAngleChanged();
+        this.stage.angle = this.angle;
     }
 
     init(id: number, world: World): void {

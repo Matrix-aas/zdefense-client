@@ -6,8 +6,6 @@ export default class App {
         await import('./Network/Packets');
         await import('./World/Entities/Livings');
 
-        new NetworkClientHandler('ws://localhost:8081/');
-
         Game.instance.init();
     }
 }

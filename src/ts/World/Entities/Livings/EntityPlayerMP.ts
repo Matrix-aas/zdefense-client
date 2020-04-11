@@ -1,7 +1,9 @@
 import EntityPlayer from "./EntityPlayer";
 import Packet3Chat from "../../../Network/Packets/Packet3Chat";
 import NetworkHandler from "../../../Network/NetworkHandler";
+import {entity} from "../Entity";
 
+@entity(0)
 export default class EntityPlayerMP extends EntityPlayer {
     protected networkHandler: NetworkHandler = null;
 

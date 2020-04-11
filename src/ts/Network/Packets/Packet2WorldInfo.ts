@@ -21,4 +21,12 @@ export default class Packet2WorldInfo extends Packet {
         buffer.writeUShort(this.version);
         buffer.writeUInt(this.playerEntityId);
     }
+
+    public getVersion(): number {
+        return this.version;
+    }
+
+    public getPlayerEntityId(): number {
+        return this.playerEntityId;
+    }
 }

@@ -11,6 +11,7 @@ export default class Packet4SpawnEnitity extends Packet {
         super();
         this._entity = entity || null;
         if (this._entity) {
+            this.data = new ArrayBufferStream();
             this._entity.writeEntityToBuffer(this.data);
         }
     }

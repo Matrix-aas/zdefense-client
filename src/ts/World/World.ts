@@ -14,14 +14,10 @@ export default abstract class World {
     protected spawnLocation: Point = new Point(0, 0);
     protected spawnRadius: Point = new Point(50, 50);
 
-    public static async registerEntities(): Promise<void> {
-
-    }
-
     public genUniqId(): number {
         let id;
         do {
-            id = Math.floor(Math.random() * 2147483647)
+            id = Math.floor(Math.random() * 2147483647);
         } while (id <= 0 || this.generatedIds.has(id));
         this.generatedIds.add(id);
         return id;

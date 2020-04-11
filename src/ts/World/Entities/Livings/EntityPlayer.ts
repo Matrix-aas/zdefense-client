@@ -1,13 +1,12 @@
-import EntityLiving from "../EntityLiving";
+import * as PIXI from 'pixi.js';
 import Point from "../../../Helpers/Point";
 import ArrayBufferStream from "../../../Network/ArrayBufferStream";
 import {Packet} from "../../../Network/Packets/Packet";
-import {entity} from "../Entity";
 import World from "../../World";
 import Resources from "../../../Helpers/Resources";
+import EntityLivingRenderable from "../EntityLivingRenderable";
 
-@entity(1)
-export default class EntityPlayer extends EntityLiving {
+export default class EntityPlayer extends EntityLivingRenderable {
     protected username: string;
 
     init(id: number, world: World): void {

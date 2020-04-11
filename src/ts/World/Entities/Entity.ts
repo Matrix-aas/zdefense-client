@@ -22,7 +22,7 @@ export default abstract class Entity {
     private world: World = null;
 
     protected position = new Point();
-    protected angle = 0;
+    protected _angle = 0;
 
     private health = 1;
     protected lastAttacker: Entity = null;
@@ -103,6 +103,20 @@ export default abstract class Entity {
 
     public abstract get size(): Point;
 
+
+    protected onAngleChanged(): void {
+        //
+    }
+
+    protected get angle(): number {
+        return this._angle;
+    }
+
+    protected set angle(value: number) {
+        this._angle = value;
+        this.onAngleChanged();
+    }
+
     public getAngle(): number {
         return this.angle;
     }
@@ -128,7 +142,7 @@ export default abstract class Entity {
     }
 
     public getTypeId(): number {
-        return Entity.getEntityTypeId(Object.getPrototypeOf(this).constustor);
+        return Entity.getEntityTypeId(Object.getPrototypeOf(this).constructor);
     }
 
     public writeEntityToBuffer(outputBuffer: ArrayBufferStream): void {
@@ -229,6 +243,9 @@ export default abstract class Entity {
     }
 
     public static writeEntityToBuffer(entity: Entity, outputBuffer: ArrayBufferStream): void {
+        if (entity.getTypeId() < 0) {
+            throw new Error('Entity id can\'t be lower zero!');
+        }
         outputBuffer.writeUShort(entity.getTypeId());
         outputBuffer.writeUInt(entity.id);
         entity.position.writeToBuffer(outputBuffer);
