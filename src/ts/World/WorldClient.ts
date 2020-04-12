@@ -27,16 +27,6 @@ export default class WorldClient extends World {
         });
 
         this.initGround();
-
-        Game.instance.pixi().ticker.add(delta => {
-            this.entities.forEach(entity => {
-                if (!entity.isDied()) {
-                    entity.tick(delta);
-                } else {
-                    this.removeEntity(entity as EntityRenderable);
-                }
-            });
-        });
     }
 
     protected initGround(): void {

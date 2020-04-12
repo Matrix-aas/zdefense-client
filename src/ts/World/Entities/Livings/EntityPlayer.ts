@@ -8,10 +8,21 @@ import EntityLivingRenderable from "../EntityLivingRenderable";
 
 export default class EntityPlayer extends EntityLivingRenderable {
     protected username: string;
+    protected usernameText: PIXI.Text;
+    protected rect: PIXI.Graphics;
 
     init(id: number, world: World): void {
         super.init(id, world);
         this.stage.addChild(this.mainSprite = new PIXI.Sprite(Resources.texture(Resources.WORLD.PLAYER)));
+
+        this.usernameText = new PIXI.Text(this.username, {
+            fontSize: 14,
+        });
+
+        this.rect = new PIXI.Graphics().beginFill(0xFF0000).drawRect(0, 0, this.size.x, this.size.y).endFill();
+
+        this.stage.addChild(this.usernameText);
+        this.stage.addChild(this.rect);
     }
 
     public getMaxHealth(): number {
@@ -20,6 +31,12 @@ export default class EntityPlayer extends EntityLivingRenderable {
 
     public get size(): Point {
         return new Point(32, 32);
+    }
+
+    tick(delta: number): void {
+        super.tick(delta);
+        this.usernameText.position.set(this.positionCenter.x + this.usernameText.width / 2, this.position.y);
+        this.rect.position.set(this.position.x, this.position.y);
     }
 
     public getUsername(): string {

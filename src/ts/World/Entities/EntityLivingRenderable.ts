@@ -6,4 +6,8 @@ export default abstract class EntityLivingRenderable extends EntityLiving {
         super.onHeadAngleChange();
         this.stage.angle = MathUtils.toDegree(this.headAngle);
     }
+
+    protected onAngleChanged(): void {
+        //
+    }
 }

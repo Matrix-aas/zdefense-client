@@ -8,7 +8,6 @@ import Packet3Chat from "./Packets/Packet3Chat";
 import Packet5DamageEntity from "./Packets/Packet5DamageEntity";
 import Game from "../Game";
 import World from "../World/World";
-import EntityPlayer from "../World/Entities/Livings/EntityPlayer";
 import EntityRenderable from "../World/Entities/EntityRenderable";
 import Packet6MoveEntity from "./Packets/Packet6MoveEntity";
 import Entity from "../World/Entities/Entity";
@@ -71,16 +70,16 @@ export default class NetworkClientHandler extends NetworkHandler {
                 throw new Error('Server out of date!');
             }
             const entityPlayer = Game.instance.getWorld().getEntity(packet.getPlayerEntityId());
-            if (entityPlayer instanceof EntityPlayer) {
-                console.log('Current player found!');
+            if (entityPlayer instanceof EntityPlayerMP) {
+                this.player = entityPlayer;
             } else {
-                console.log('Hmmmm....');
+                throw new Error('Unknown player id!');
             }
         } else if (packet instanceof Packet3Chat) {
             console.log(`[CHAT] ${packet.getMessage()}`);
         } else if (packet instanceof Packet4SpawnEnitity) {
             const entity = packet.getEntity();
-            if (entity) {
+            if (entity && !Game.instance.getWorld().hasEntity(entity)) {
                 Game.instance.getWorld().spawnEntity(entity as EntityRenderable, entity.id);
             } else {
                 throw new Error('Spawn Entity is null!');
@@ -114,5 +113,9 @@ export default class NetworkClientHandler extends NetworkHandler {
 
     public getKickedReason(): string {
         return this.kickedReason;
+    }
+
+    public getPlayer(): EntityPlayerMP {
+        return this.player;
     }
 }

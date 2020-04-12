@@ -1,5 +1,6 @@
 import Game from "../Game";
 import NetworkClientHandler from "./NetworkClientHandler";
+import EntityPlayerMP from "../World/Entities/Livings/EntityPlayerMP";
 
 export default class NetworkManager {
     protected networkHandler: NetworkClientHandler = null;
@@ -54,9 +55,21 @@ export default class NetworkManager {
         return this.networkHandler !== null ? this.networkHandler.isConnected() : false;
     }
 
+    public isInGame(): boolean {
+        return this.isConnected() && this.getPlayer() !== null;
+    }
+
     public async networkTick(): Promise<void> {
         if (this.isConnected()) {
             await this.networkHandler.process();
         }
+    }
+
+    public getPlayer(): EntityPlayerMP {
+        return this.isConnected() ? this.networkHandler.getPlayer() : null;
+    }
+
+    public getNetworkHandler(): NetworkClientHandler {
+        return this.networkHandler;
     }
 }
