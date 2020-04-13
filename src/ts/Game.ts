@@ -63,6 +63,10 @@ export default class Game {
         return this.camera;
     }
 
+    public getNetworkManager(): NetworkManager {
+        return this.networkManager;
+    }
+
     public getGuiManager(): GUIManager {
         return this.guiManager;
     }
@@ -142,7 +146,7 @@ export default class Game {
 
         const player: EntityPlayerMP = this.networkManager.getPlayer();
         if (player != null) {
-            player.setHeadAngle(player.positionCenter.angle(this.pointerPosition.clone().sub(this.camera.getX(), this.camera.getY())));
+            player.setHeadAngle(player.position.angle(this.pointerPosition.clone().sub(this.camera.getX(), this.camera.getY())));
             let moving = false;
             let summAngle = 0.0;
             if (this.isKeyDown('w')) {

@@ -14,7 +14,7 @@ interface FilterAnimation {
 
 export default abstract class EntityRenderable extends Entity {
     public readonly stage: PIXI.Container = new PIXI.Container();
-    protected mainSprite: PIXI.Sprite = null;
+    private _mainSprite: PIXI.Sprite = null;
     private _filterAnimation: FilterAnimation = null;
 
     constructor() {
@@ -36,19 +36,27 @@ export default abstract class EntityRenderable extends Entity {
         });
 
         this.position.on('change', (x: number, y: number) => {
-            this.stage.position.x = x;
-            this.stage.position.y = y;
+            this.stage.x = x;
+            this.stage.y = y;
         });
-    }
-
-    protected onAngleChanged(): void {
-        super.onAngleChanged();
-        this.stage.angle = this.angle;
     }
 
     init(id: number, world: World): void {
         super.init(id, world);
         this.stage.pivot.set(this.size.x / 2, this.size.y / 2);
+    }
+
+    protected get mainSprite(): PIXI.Sprite {
+        return this._mainSprite;
+    }
+
+    protected set mainSprite(sprite: PIXI.Sprite) {
+        this._mainSprite = sprite;
+        if (this._mainSprite) {
+            this._mainSprite.anchor.set(0.5, 0.5);
+            this._mainSprite.position.x += this._mainSprite.width / 2;
+            this._mainSprite.position.y += this._mainSprite.height / 2;
+        }
     }
 
     public tick(delta: number): void {

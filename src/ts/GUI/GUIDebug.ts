@@ -9,12 +9,14 @@ export default class GUIDebug extends GUI {
     }
 
     public init(): void {
-        this.stage.addChild(this.coordinates = new PIXI.Text('0 ; 0'));
+        this.stage.addChild(this.coordinates = new PIXI.Text(''));
     }
 
     tick(delta: number): void {
         super.tick(delta);
 
-        this.coordinates.text = `${this.game.getCamera().getX()} ; ${this.game.getCamera().getY()} ; ${this.game.getWorld().entitiesCount()}`;
+        if (this.game.getNetworkManager().isInGame()) {
+            this.coordinates.text = `${this.game.getNetworkManager().getPlayer().position.x.toFixed(1)} ; ${this.game.getNetworkManager().getPlayer().position.y.toFixed(1)} ; ${this.game.getWorld().entitiesCount()}`;
+        }
     }
 }
