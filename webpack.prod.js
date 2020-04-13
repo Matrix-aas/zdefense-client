@@ -1,8 +1,13 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const JavaScriptObfuscator = require('webpack-obfuscator');
+const path = require('path');
 
 module.exports = {
-    devtool: 'inline-source-map',
+    output: {
+        filename: '[name].bundle.js',
+        path: path.resolve(__dirname, 'dist'),
+    },
     module: {
         rules: [
             {
@@ -58,7 +63,22 @@ module.exports = {
                 filename: 'style.css',
                 allChunks: true
             }
-        )
+        ),
+        new JavaScriptObfuscator({
+            compact: true,
+            debugProtection: false,
+            debugProtectionInterval: false,
+            disableConsoleOutput: false,
+            identifierNamesGenerator: 'mangled',
+            renameGlobals: true,
+            rotateStringArray: true,
+            selfDefending: true,
+            shuffleStringArray: true,
+            sourceMap: false,
+            target: 'browser',
+            transformObjectKeys: true,
+            unicodeEscapeSequence: true
+        }),
     ],
     resolve: {
         extensions: [

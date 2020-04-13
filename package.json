@@ -4,8 +4,8 @@
   "description": "ZDefense Game",
   "main": "./src/index.ts",
   "scripts": {
-    "start": "webpack-dev-server --open --mode development",
-    "build": "webpack --mode production"
+    "start": "webpack-dev-server --open --mode development --config webpack.dev.js",
+    "build": "webpack --mode production --config webpack.prod.js"
   },
   "author": "Matrix",
   "license": "MIT",
@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "eventemitter2": "^6.3.1",
-    "pixi.js": "^5.2.1"
+    "pixi.js": "^5.2.1",
+    "webpack-obfuscator": "^0.27.4"
   }
 }
